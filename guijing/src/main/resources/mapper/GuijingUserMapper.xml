@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiannvzuo.guijing.dao.GuijingUserMapper">
+    <resultMap id="GuijingUserResult" type="com.xiannvzuo.guijing.entity.GuijingUser">
+        <result property="userId" column="user_id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="loginName" column="login_name"/>
+        <result property="passwordMd5" column="password_md5"/>
+        <result property="introduceSign" column="introduce_sign"/>
+        <result property="address" column="address"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="lockedFlag" column="locked_flag"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        user_id, nick_name, login_name, password_md5, introduce_sign, address, is_deleted,
+        locked_flag, create_time
+    </sql>
+
+    <insert id="insert" parameterType="com.xiannvzuo.guijing.entity.GuijingUser">
+        insert into tb_guijing_user
+        (<include refid="BaseColumnList"/>)
+        values(
+        #{userId}, #{nickName}, #{loginName}, #{passwordMd5}, #{introduceSign}, #{address},
+         #{isDeleted}, #{lockedFlag}, #{createTime}
+        )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.xiannvzuo.guijing.entity.GuijingUser">
+        insert into tb_guijing_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="passwordMd5 != null">
+                password_md5,
+            </if>
+            <if test="introduceSign != null">
+                introduce_sign,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="lockedFlag != null">
+                locked_flag,
+            </if>
+            <if test="createTime != null">
+                create_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="nickName != null">
+                #{nickName},
+            </if>
+            <if test="loginName != null">
+                #{loginName},
+            </if>
+            <if test="passwordMd5 != null">
+                #{passwordMd5},
+            </if>
+            <if test="introduceSign != null">
+                #{introduceSign},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted},
+            </if>
+            <if test="lockedFlag != null">
+                #{lockedFlag},
+            </if>
+            <if test="createTime != null">
+                #{createTime}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        update tb_guijing_user
+        set is_deleted = 1
+        where user_id = #{userId}
+    </update>
+
+    <update id="lockUserByPrimaryKey" parameterType="java.lang.Long">
+        update tb_guijing_user
+        set locked_flag = 1
+        where user_id = #{userId}
+    </update>
+
+    <!--至于锁定的用户，可以在查询前判断，如果锁定，则告知用户该账户已被锁定-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="GuijingUserResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_user
+        where user_id = #{userId} and is_deleted = 0
+    </select>
+
+    <select id="login" resultMap="GuijingUserResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_user
+        where login_name = #{loginName} and password_md5 = #{loginPassword} and is_deleted=0
+    </select>
+
+    <select id="selectByLoginName" resultMap="GuijingUserResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_user
+        where login_name = #{loginName} and is_deleted=0
+    </select>
+
+    <update id="updateSelective" parameterType="com.xiannvzuo.guijing.entity.GuijingUser">
+        update tb_guijing_user
+        user_id, nick_name, login_name, password_md5, introduce_sign, address, is_deleted,
+        locked_flag, create_time
+        <set>
+            <if test="nickName != null">
+                nick_name = #{nickName},
+            </if>
+            <if test="loginName != null">
+                login_name = #{loginName},
+            </if>
+            <if test="passwordMd5 != null">
+                password_md5 = #{passwordMd5},
+            </if>
+            <if test="introduceSign != null">
+                introduce_sign = #{introduceSign},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted =  #{isDeleted},
+            </if>
+            <if test="lockedFlag != null">
+                locked_flag = #{lockedFlag},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+        </set>
+        where login_name = #{loginName} and is_deleted=0
+    </update>
+
+    <update id="updateUserAddress" >
+        update tb_guijing_user
+        set address = #{address}
+        where user_id = #{id} and is_deleted=0
+    </update>
+
+    <select id="findGuijingUserList" parameterType="Map" resultMap="GuijingUserResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_user
+        order by create_time asc
+        where is_deleted=0
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getTotalGuijingUser" parameterType="Map" resultType="int">
+        select count(*)
+        from tb_guijing_user
+        where 1=1
+        <if test="loginName!=null and loginName!=''">
+            and login_name = #{loginName}
+        </if>
+    </select>
+
+    <update id="batchChangeLock" >
+        update tb_guijing_user
+        set locked_flag = 1
+        where user_id in
+        <foreach collection="ids" item="id" close=")" open="(" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiannvzuo.guijing.dao.GuijingOrderItemMapper">
+    <resultMap id="GuijingOrderItemResult" type="com.xiannvzuo.guijing.entity.GuijingOrderItem">
+        <result property="orderItemId" column="order_item_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="goodsCoverImg" column="goods_cover_img"/>
+        <result property="sellingPrice" column="selling_price"/>
+        <result property="goodsCount" column="goods_count"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        order_item_id, order_id, goods_id, goods_name,
+        goods_cover_img, selling_price, goods_count, create_time,
+    </sql>
+
+    <delete id="tb_guijing_order_item" parameterType="java.lang.Long">
+        delete from tb_guijing_order_item
+        where  order_item_id = #{orderItemId}
+    </delete>
+
+    <insert id="insertOrderItemSelective" parameterType="com.xiannvzuo.guijing.entity.GuijingOrderItem">
+        insert into tb_guijing_order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderItemId != null">
+                order_item_id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsName != null">
+                goods_name,
+            </if>
+            <if test="goodsCoverImg != null">
+                goods_cover_img,
+            </if>
+            <if test="sellingPrice != null">
+                selling_price,
+            </if>
+            <if test="goodsCount != null">
+                goods_count,
+            </if>
+            <if test="createTime != null">
+                create_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderItemId != null">
+                #{orderItemId},
+            </if>
+            <if test="orderId != null">
+                #{orderId},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName},
+            </if>
+            <if test="goodsCoverImg != null">
+                #{goodsCoverImg},
+            </if>
+            <if test="sellingPrice != null">
+                #{sellingPrice},
+            </if>
+            <if test="goodsCount != null">
+                #{goodsCount},
+            </if>
+            <if test="createTime != null">
+                #{createTime}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" resultMap="GuijingOrderItemResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order_item
+        where order_item_id = #{orderItemId}
+    </select>
+
+    <select id="getOrderItemByOrderId" resultMap="GuijingOrderItemResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order_item
+        where order_id = #{orderId}
+    </select>
+
+    <select id="getByOrderIds" resultMap="GuijingOrderItemResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order_item
+        where order_id in
+        <foreach collection="orderIds" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="batchInsertOrderItem" parameterType="com.xiannvzuo.guijing.entity.GuijingOrderItem">
+        insert into tb_guijing_order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderItemId != null">
+                order_item_id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsName != null">
+                goods_name,
+            </if>
+            <if test="goodsCoverImg != null">
+                goods_cover_img,
+            </if>
+            <if test="sellingPrice != null">
+                selling_price,
+            </if>
+            <if test="goodsCount != null">
+                goods_count,
+            </if>
+            <if test="createTime != null">
+                create_time
+            </if>
+        </trim>
+        values
+        <foreach collection="orderItems" item="oderItem" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="orderItemId != null">
+                    #{oderItem.orderItemId},
+                </if>
+                <if test="orderId != null">
+                    #{oderItem.orderId},
+                </if>
+                <if test="goodsId != null">
+                    #{oderItem.goodsId},
+                </if>
+                <if test="goodsName != null">
+                    #{oderItem.goodsName},
+                </if>
+                <if test="goodsCoverImg != null">
+                    #{oderItem.goodsCoverImg},
+                </if>
+                <if test="sellingPrice != null">
+                    #{oderItem.sellingPrice},
+                </if>
+                <if test="goodsCount != null">
+                    #{oderItem.goodsCount},
+                </if>
+                <if test="createTime != null">
+                    #{oderItem.createTime}
+                </if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xiannvzuo.guijing.entity.GuijingOrderItem">
+        update tb_guijing_order_item
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
+            </if>
+            <if test="goodsName != null">
+                goods_name =  #{goodsName},
+            </if>
+            <if test="goodsCoverImg != null">
+                goods_cover_img = #{goodsCoverImg},
+            </if>
+            <if test="sellingPrice != null">
+                selling_price = #{sellingPrice},
+            </if>
+            <if test="goodsCount != null">
+                goods_count = #{goodsCount},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+        </set>
+        where order_item_id = #{orderItemId}
+    </update>
+
+</mapper>

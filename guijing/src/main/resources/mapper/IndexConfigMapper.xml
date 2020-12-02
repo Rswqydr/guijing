@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiannvzuo.guijing.dao.IndexConfigMapper">
+    <resultMap id="IndexConfigResult" type="com.xiannvzuo.guijing.entity.IndexConfig">
+        <result property="configId" column="config_id"/>
+        <result property="configName" column="config_name"/>
+        <result property="configType" column="config_type"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="redirectUrl" column="redirect_url"/>
+        <result property="configRank" column="config_rank"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        config_id, config_name, config_type, goods_id, redirect_url,
+        config_rank, config_rank, is_delete, create_time, create_user,
+        update_time, update_user
+    </sql>
+
+    <insert id="insert" parameterType="com.xiannvzuo.guijing.entity.IndexConfig">
+        insert into tb_guijing_index_config
+        (<include refid="BaseColumnList"/>)
+        values(
+       #{configId},  #{configName},  #{configType} ,#{goodsId}, #{redirectUrl},
+        #{configRank} , #{isDelete},  #{createTime} ,#{createUser},
+        #{updateTime} , #{updateUser}
+        )
+
+    </insert>
+    <!--   config_id=#{configId},  config_name=#{configName},  config_type=#{configType} ,goods_id=#{goodsId}, redirect_url=#{redirectUrl},
+        config_rank=#{configRank} , is_deleted=#{isDelete},  create_time=#{createTime} ,create_user=#{createUser},
+        update_time=#{updateTime} ,update_user=#{updateUser}-->
+    <insert id="insertSelective" parameterType="com.xiannvzuo.guijing.entity.IndexConfig">
+        insert into tb_guijing_index_config
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="configId!=null">
+                config_id,
+            </if>
+            <if test="configName!=null">
+                config_name,
+            </if>
+            <if test="configType!=null">
+                config_type,
+            </if>
+            <if test="goodsId!=null">
+                goods_id,
+            </if>
+            <if test="redirectUrl!=null">
+                redirect_url,
+            </if>
+            <if test="configRank!=null">
+                config_rank,
+            </if>
+            <if test="isDelete!=null">
+                is_delete,
+            </if>
+            <if test="createTime!=null">
+                create_time,
+            </if>
+            <if test="createUser!=null">
+                create_user,
+            </if>
+            <if test="updateTime!=null">
+                update_time,
+            </if>
+            <if test="updateUser!=null">
+                update_user
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="configId!=null">
+                #{configId},
+            </if>
+            <if test="configName!=null">
+                #{configName},
+            </if>
+            <if test="configType!=null">
+                #{configType} ,
+            </if>
+            <if test="goodsId!=null">
+                #{goodsId},
+            </if>
+            <if test="redirectUrl!=null">
+                #{redirectUrl},
+            </if>
+            <if test="configRank!=null">
+                #{configRank}
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},
+            </if>
+            <if test="createTime!=null">
+                #{createTime} ,
+            </if>
+            <if test="createUser!=null">
+                #{createUser},
+            </if>
+            <if test="updateTime!=null">
+                #{updateTime} ,
+            </if>
+            <if test="updateUser!=null">
+                #{updateUser}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        update tb_guijing_index_config
+        set id_detele = 1 and update_time = now()
+        where config_id = #{configId}
+    </update>
+
+    <select id="findIndexConfigList" resultMap="IndexConfigResult" parameterType="Map">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_index_config
+        <where>
+            <if test="configType != null and configType != '' ">
+                and config_type = #{configType}
+            </if>
+            and is_delete = 0
+        </where>
+        order by config_rank desc
+        <if test="start!=null and limit!=null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="totalIndexConfigs" resultType="int">
+        select count(*) from  tb_guijing_index_config
+        <where>
+            <if test="configType!= null and configType!=''">
+                and config_type = #{configType}
+            </if>
+            <if test="configName!=null and configName!=''">
+                and config_name = CONCAT("%",#{configName},"%")
+            </if>
+            and is_delete = 0
+        </where>
+        <if test="start!=null and limit!=null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <update id="batchDelete" >
+        update tb_guijing_index_config
+        set is_delete = 1 and update_time = now()
+        where config_id in
+        <foreach collection="array" item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="IndexConfigResult" >
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_index_config
+        where config_id = #{configId}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xiannvzuo.guijing.entity.IndexConfig">
+        update tb_guijing_index_config
+        <set>
+            <if test="configName!=null">
+                config_name = #{configName},
+            </if>
+            <if test="configType!=null">
+                config_type = #{configType},
+            </if>
+            <if test="goodsId!=null">
+                goods_id = #{goodsId},
+            </if>
+            <if test="redirectUrl!=null">
+                redirect_url = #{redirectUrl},
+            </if>
+            <if test="configRank!=null">
+                config_rank =#{configRank},
+            </if>
+            <if test="isDelete!=null">
+                is_delete = #{isDelete},
+            </if>
+            <if test="createTime!=null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUser!=null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateTime!=null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser!=null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where config_id = #{configId}
+    </update>
+
+    <select id="findIndexConfigByTypeAndNumber" resultMap="IndexConfigResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_index_config
+        where config_type = #{configType}
+        <if test="number > 0">
+            limit #{number}
+        </if>
+
+    </select>
+
+
+</mapper>

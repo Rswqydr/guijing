@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiannvzuo.guijing.dao.CarouselMapper">
+    <resultMap id="CarouselResult" type="com.xiannvzuo.guijing.entity.Carousel">
+        <result property="carouselId" column="carousel_id"/>
+        <result property="carouselUrl" column="carousel_url"/>
+        <result property="redirectUrl" column="redirect_url"/>
+        <result property="carouselRank" column="carousel_rank"/>
+        <result property="isDelete" column="is_deleted"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createId" column="create_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateId" column="update_user"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        carousel_id, carousel_url, redirect_url, carousel_rank, is_deleted, create_time,
+        create_user, update_time, update_user
+    </sql>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
+        update  tb_guijing_carousel
+        set isDelete = 1 and update_time = now()
+        where carousel_id = #{carouselId}
+    </update>
+
+    <update id="deleteByPrimaryKeyList">
+        update  tb_guijing_carousel
+        set isDelete = 1 and update_time = now()
+        where carousel_id in
+        <foreach collection="List" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <insert id="insert" parameterType="com.xiannvzuo.guijing.entity.Carousel">
+        insert into tb_guijing_carousel
+        <include refid="Base_Column_List"/>
+        values (#{carouselId}, #{carouselUrl}, #{redirectUrl}, #{carouselRank},
+        #{isDelete}, #{createTime}, #{createId}, #{updateTime}, #{updateId})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.xiannvzuo.guijing.entity.Carousel">
+        insert into tb_guijing_carousel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carouselId != null">
+                carousel_id,
+            </if>
+            <if test="carouselUrl != null">
+                carousel_url,
+            </if>
+            <if test="redirectUrl != null">
+                redirect_url,
+            </if>
+            <if test="carouselRank != null">
+                carousel_rank,
+            </if>
+            <if test="isDelete != null">
+                is_deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createId != null">
+                create_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateId != null">
+                update_user,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carouselId != null">
+                #{carouselId},
+            </if>
+            <if test="carouselUrl != null">
+                #{carouselUrl},
+            </if>
+            <if test="redirectUrl != null">
+                #{redirectUrl},
+            </if>
+            <if test="carouselRank != null">
+                #{carouselRank},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createId != null">
+                #{createId},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateId != null">
+                #{updateId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="CarouselResult">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_guijing_carousel
+        where carousel_id = #{carouselId}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xiannvzuo.guijing.entity.Carousel">
+        update tb_guijing_carousel
+        <set>
+            <if test="carouselUrl != null">
+                carousel_url = #{carouselUrl},
+            </if>
+            <if test="redirectUrl != null ">
+                redirect_url = #{redirectUrl},
+            </if>
+            <if test="carouselRank!= null">
+                carousel_rank = #{carouselRank},
+            </if>
+            <if test="isDelete!= null">
+                is_deleted = #{isDelete},
+            </if>
+            <if test="createTime!= null">
+                create_time = #{createTime},
+            </if>
+            <if test="createId!= null">
+                create_user = #{createId},
+            </if>
+            <if test="updateTime!= null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateId!= null">
+                update_user = #{updateId}
+            </if>
+        </set>
+        where carousel_id = #{carouselId}
+    </update>
+
+    <select id="findCarouselList" parameterType="Map" resultMap="CarouselResult">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_guijing_carousel
+        where is_deleted = 0
+        order by carousel_rank desc
+        <if test="start!=null and limit!=null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCarousel" parameterType="Map" resultType="int">
+        select count(*)
+        from tb_guijing_carousel
+        where is_deleted = 0
+    </select>
+
+    <select id="findCarouselsByNum" resultMap="CarouselResult">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_guijing_carousel
+        where is_deleted = 0
+        order by carousel_rank desc
+        limit #{number}
+    </select>
+
+    <update id="deleteBatch">
+        update tb_guijing_carousel
+        set is_deleted = 1 and update_time = now()
+        where carousel_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

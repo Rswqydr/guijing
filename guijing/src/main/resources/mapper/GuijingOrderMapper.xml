@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiannvzuo.guijing.dao.GuijingOrderMapper">
+    <resultMap id="GuijingOrderResult" type="com.xiannvzuo.guijing.entity.GuijingOrder">
+        <result property="orderId" column="order_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="payType" column="pay_type"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="extraInfo" column="extra_info"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userAddress" column="user_address"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        order_id, order_no, user_id, total_price, pay_status, pay_type,  pay_time, order_status,
+        extra_info,  user_name, user_phone, user_address,  is_deleted, create_time, update_time
+    </sql>
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        update tb_guijing_order
+        set is_deleted = 1
+        where order_id = #{orderId}
+    </update>
+
+    <update id="insertSelective" parameterType="com.xiannvzuo.guijing.entity.GuijingOrder">
+        insert into tb_guijing_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null" >
+                order_id,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="totalPrice != null" >
+                total_price,
+            </if>
+            <if test="payStatus != null" >
+                pay_status,
+            </if>
+            <if test="payType != null" >
+                pay_type,
+            </if>
+            <if test="payTime != null" >
+                pay_time,
+            </if>
+            <if test="orderStatus != null" >
+                order_status,
+            </if>
+            <if test="extraInfo != null" >
+                extra_info,
+            </if>
+            <if test="userName != null" >
+                user_name,
+            </if>
+            <if test="userPhone != null" >
+                user_phone,
+            </if>
+            <if test="userAddress != null" >
+                user_address,
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null" >
+                #{orderId},
+            </if>
+            <if test="orderNo != null" >
+                #{orderNo},
+            </if>
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="totalPrice != null" >
+                #{totalPrice},
+            </if>
+            <if test="payStatus != null" >
+                #{payStatus},
+            </if>
+            <if test="payType != null" >
+                #{payType},
+            </if>
+            <if test="payTime != null" >
+                #{payTime},
+            </if>
+            <if test="orderStatus != null" >
+                #{orderStatus},
+            </if>
+            <if test="extraInfo != null" >
+                #{extraInfo},
+            </if>
+            <if test="userName != null" >
+                #{userName},
+            </if>
+            <if test="userPhone != null" >
+                #{userPhone},
+            </if>
+            <if test="userAddress != null" >
+                #{userAddress},
+            </if>
+            <if test="isDeleted != null" >
+                #{isDeleted},
+            </if>
+            <if test="createTime != null" >
+                #{createTime},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime}
+            </if>
+        </trim>
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="GuijingOrderResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order
+        where order_id = #{orderId} and is_deleted=0
+    </select>
+
+    <select id="selectByOrderNo" parameterType="java.lang.String" resultMap="GuijingOrderResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order
+        where order_no = #{orderNo} and is_deleted=0
+    </select>
+
+    <update id="updateOrderSelective" parameterType="com.xiannvzuo.guijing.entity.GuijingOrder">
+        update tb_guijing_order
+        <set>
+            <if test="orderNo != null" >
+                order_no = #{orderNo},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId},
+            </if>
+            <if test="totalPrice != null" >
+                total_price = #{totalPrice},
+            </if>
+            <if test="payStatus != null" >
+                pay_status = #{payStatus},
+            </if>
+            <if test="payType != null" >
+                pay_type = #{payType},
+            </if>
+            <if test="payTime != null" >
+                pay_time =  #{payTime},
+            </if>
+            <if test="orderStatus != null" >
+                order_status =  #{orderStatus},
+            </if>
+            <if test="extraInfo != null" >
+                extra_info =  #{extraInfo},
+            </if>
+            <if test="userName != null" >
+                user_name = #{userName},
+            </if>
+            <if test="userPhone != null" >
+                user_phone =  #{userPhone},
+            </if>
+            <if test="userAddress != null" >
+                user_address = #{userAddress},
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted = #{isDeleted},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where order_id = #{orderId} and is_deleted=0
+    </update>
+
+    <!--查询的时候，我们考虑筛选的条件有
+    1、 订单号
+    2、 订单对应的用户
+    3、 支付类型
+    4、 订单状态
+    5、 订单是否被删除
+    6、 多久之前的订单
+    7、 多久之后创建的订单
+    以及分页的判定条件
+    -->
+    <select id="findGuijingOrderList" resultMap="GuijingOrderResult" parameterType="Map">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order
+        <where>
+            <if test="orderNo!=null and orderNo!=''">
+                and order_no = #{orderNo}
+            </if>
+            <if test="userId!=null and userId!=''">
+                and user_id = #{userId}
+            </if>
+            <if test="payType!=null and payType!=''">
+                and pay_type = #{payType}
+            </if>
+            <if test="orderStatus!=null and orderStatus!=''">
+                and order_status = #{orderStatus}
+            </if>
+            <if test="isDeleted!=null and isDeleted!=''">
+                and is_deleted = #{isDeleted}
+            </if>
+            <if test="startTime != null and startTime.trim() != ''">
+                and create_time &gt; #{startTime}
+            </if>
+            <if test="endTime != null and endTime.trim() != ''">
+                and create_time &lt; #{endTime}
+            </if>
+        </where>
+        order by create_time desc
+        <if test="start!= null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getTotalGuijingOrder" parameterType="Map" resultType="int">
+        select count(*) from tb_guijing_order
+        <where>
+            <if test="orderNo!=null and orderNo!=''">
+                and order_no = #{orderNo}
+            </if>
+            <if test="userId!=null and userId!=''">
+                and user_id = #{userId}
+            </if>
+            <if test="payType!=null and payType!=''">
+                and pay_type = #{payType}
+            </if>
+            <if test="orderStatus!=null and orderStatus!=''">
+                and order_status = #{orderStatus}
+            </if>
+            <if test="isDeleted!=null and isDeleted!=''">
+                and is_deleted = #{isDeleted}
+            </if>
+            <if test="startTime != null and startTime.trim() != ''">
+                and create_time &gt; #{startTime}
+            </if>
+            <if test="endTime != null and endTime.trim() != ''">
+                and create_time &lt; #{endTime}
+            </if>
+        </where>
+        <if test="start!=null and limit!=null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getByPrimaryKeys" resultMap="GuijingOrderResult">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_guijing_order
+        where id_deleted = 0 and order_id in
+        <foreach collection="orderIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="checkDone">
+        update tb_guijing_order
+        set order_status = 2,update_time = now()
+        where order_id in
+        <foreach collection="orderIds" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <update id="checkOut">
+        update tb_guijing_order
+        set order_status = 3,update_time = now()
+        where order_id in
+        <foreach collection="orderIds" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="closeOrder" >
+         update tb_guijing_order
+         set order_status = #{orderStatus}, update_time = now()
+         where order_id in
+         <foreach collection="orderIds" item="id" open="(" close=")" separator=",">
+             #{id}
+         </foreach>
+
+    </update>
+
+
+</mapper>
